@@ -2,22 +2,41 @@
 <html>
 <head>
   <title>Socket.IO chat</title>
-  
+
+<style>
+body {
+    background-color: #AEB1B2;
+}
+
+p {
+  font-size:  200%;
+ 
+}
+</style>
 </head>
 <body>
+
+ <img id="resetButton" src="http://www.refuelmymlm.com/wp-content/uploads/2012/01/reset.jpg"  height="200" width="200" > 
   <script src="/socket.io/socket.io.js"></script>
   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<p>Amount of people who need help: </p>
+<p id="output"></p>
 <script type="text/javascript">
-
 var socket = io();
-var adminHelpCount =0;
 
     socket.on('adminTotalCount', function(adminTotalCount){
+      document.getElementById("output").innerHTML= adminTotalCount;
+      //$("output").innerHTML= adminTotalCount;
+     //console.log($("output"));
       console.log(adminTotalCount);
     });
-    
-
+  
+ $('#resetButton').click(function (){
+  adminTotalCount=0;
+  console.log("reset the counter");
+  socket.emit('reset' , "true");
+ });
   </script>
 </body>
 </html>

@@ -3,6 +3,10 @@ var http = require('http').Server(app);
 var filepath = 'D:\\Dropbox\\NodeTest\\';
 var io = require('socket.io')(http);
 var helpCounter=0;
+var time = Date.now();
+
+
+
 app.get('/admin', function(req, res){
 	res.sendFile(filepath + 'admin.html');
 });
@@ -22,9 +26,26 @@ io.on('connection', function(socket){
 	socket.on('disconnect', function(){
 		console.log('user disconnected');
 	});
+
+
+socket.on('reset', function(){
+			helpCounter = 0;
+			io.emit("adminTotalCount",helpCounter);			
+	});
+
+
 	socket.on('help', function(){
-		helpCounter++;
-		io.emit("adminTotalCount",helpCounter);
+
+		var timePressed = Date.now();
+		//Users can only ask for help once 
+		if(timePressed > time+2500){
+			helpCounter++;
+			time=timePressed;
+			io.emit("adminTotalCount",helpCounter);			
+		}
+
 	});
 
 });
+
+
